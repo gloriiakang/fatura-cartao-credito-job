@@ -9,9 +9,11 @@ public class Transacao {
 	private String descricao;
 	private Double valor;
 	private Date data;
+	
 	public int getId() {
 		return id;
 	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}
