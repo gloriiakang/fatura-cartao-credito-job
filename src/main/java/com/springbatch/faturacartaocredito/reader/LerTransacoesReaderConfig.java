@@ -17,8 +17,7 @@ import com.springbatch.faturacartaocredito.dominio.Cliente;
 import com.springbatch.faturacartaocredito.dominio.Transacao;
 
 @Configuration
-public class LerTransacaoesReaderConfig {
-
+public class LerTransacoesReaderConfig {
 	@Bean
 	public JdbcCursorItemReader<Transacao> lerTransacoesReader(
 			@Qualifier("appDataSource") DataSource dataSource) {
@@ -37,7 +36,6 @@ public class LerTransacaoesReaderConfig {
 			public Transacao mapRow(ResultSet rs, int rowNum) throws SQLException {
 				CartaoCredito cartaoCredito = new CartaoCredito();
 				cartaoCredito.setNumeroCartaoCredito(rs.getInt("numero_cartao_credito"));
-				
 				Cliente cliente = new Cliente();
 				cliente.setId(rs.getInt("cliente"));
 				cartaoCredito.setCliente(cliente);
@@ -51,6 +49,7 @@ public class LerTransacaoesReaderConfig {
 				
 				return transacao;
 			}
+			
 		};
 	}
 }

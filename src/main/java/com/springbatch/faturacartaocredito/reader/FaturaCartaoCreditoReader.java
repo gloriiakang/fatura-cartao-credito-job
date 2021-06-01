@@ -7,23 +7,21 @@ import org.springframework.batch.item.ItemStreamReader;
 import com.springbatch.faturacartaocredito.dominio.FaturaCartaoCredito;
 import com.springbatch.faturacartaocredito.dominio.Transacao;
 
-public class FaturaCartaoCreditoReader implements ItemStreamReader<FaturaCartaoCredito>{
-
+public class FaturaCartaoCreditoReader implements ItemStreamReader<FaturaCartaoCredito> {
 	private ItemStreamReader<Transacao> delegate;
 	private Transacao transacaoAtual;
-	
-	@SuppressWarnings("null")
+
 	@Override
 	public FaturaCartaoCredito read() throws Exception {
-
 		if (transacaoAtual == null)
-			transacaoAtual =delegate.read();
+			transacaoAtual = delegate.read();
 		
 		FaturaCartaoCredito faturaCartaoCredito = null;
 		Transacao transacao = transacaoAtual;
 		transacaoAtual = null;
 		
 		if (transacao != null) {
+			faturaCartaoCredito = new FaturaCartaoCredito();
 			faturaCartaoCredito.setCartaoCredito(transacao.getCartaoCredito());
 			faturaCartaoCredito.setCliente(transacao.getCartaoCredito().getCliente());
 			faturaCartaoCredito.getTransacoes().add(transacao);
@@ -33,7 +31,7 @@ public class FaturaCartaoCreditoReader implements ItemStreamReader<FaturaCartaoC
 		}
 		return faturaCartaoCredito;
 	}
-	
+
 	private boolean isTransacaoRelacionada(Transacao transacao) throws Exception {
 		return peek() != null && transacao.getCartaoCredito().getNumeroCartaoCredito() == transacaoAtual.getCartaoCredito().getNumeroCartaoCredito();
 	}
@@ -46,19 +44,20 @@ public class FaturaCartaoCreditoReader implements ItemStreamReader<FaturaCartaoC
 	public FaturaCartaoCreditoReader(ItemStreamReader<Transacao> delegate) {
 		this.delegate = delegate;
 	}
-	
+
 	@Override
 	public void open(ExecutionContext executionContext) throws ItemStreamException {
 		delegate.open(executionContext);
 	}
-	
+
 	@Override
 	public void update(ExecutionContext executionContext) throws ItemStreamException {
 		delegate.update(executionContext);
 	}
-	
+
 	@Override
 	public void close() throws ItemStreamException {
 		delegate.close();
 	}
+
 }
